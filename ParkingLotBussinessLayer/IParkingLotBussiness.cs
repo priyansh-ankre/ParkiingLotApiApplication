@@ -1,11 +1,10 @@
 ﻿using ParkingLotModelLayer;
-using System.Collections.Generic;
 
-namespace ParkingLotRepositoryLayer
+namespace ParkingLotBussinessLayer
 {
-    public interface IParkingLotRepository
+    public interface IParkingLotBussiness
     {
-        public IEnumerable<Parking> GetAllParkingData();
+        public object GetAllParkingData();
         public void AddParkingData(Parking parking);
         public void AddParkingTypeData(ParkingType parkingType);
         public void AddRolesData(Roles roles);
