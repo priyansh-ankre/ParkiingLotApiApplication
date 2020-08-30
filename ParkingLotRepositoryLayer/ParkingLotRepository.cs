@@ -135,5 +135,57 @@ namespace ParkingLotRepositoryLayer
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
         }
+
+        public Parking GetParkingDataByVehicleNumber(string vehicleNumber)
+        {
+            Parking parking = new Parking();
+            string sqlQuery = "Select * From Parking Where VehicleNumber=" + vehicleNumber;
+            SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+            sqlConnection.Open();
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+
+                parking.Id = Convert.ToInt32(sqlDataReader["Id"]);
+                parking.ParkingSLot = Convert.ToInt32(sqlDataReader["ParkingSlot"]);
+                parking.VehicleNumber = sqlDataReader["VehicleNumber"].ToString();
+                parking.EntryTime = sqlDataReader["EntryTime"].ToString();
+                parking.VehicleId = Convert.ToInt32(sqlDataReader["VehicleId"]);
+                parking.ParkingId = Convert.ToInt32(sqlDataReader["ParkingId"]);
+                parking.RolesId = Convert.ToInt32(sqlDataReader["RoleId"]);
+                parking.Disabled = Convert.ToBoolean(sqlDataReader["Disabled"]);
+                parking.ExitTime = sqlDataReader["ExitTime"].ToString();
+                parking.Charges = Convert.ToInt32(sqlDataReader["Charges"]);
+            }
+            return parking;
+        }
+
+        public Parking GetParkingDataByParkingSlot(string parkingSlot)
+        {
+            Parking parking = new Parking();
+            string sqlQuery = "Select * From Parking Where VehicleNumber=" + parkingSlot;
+            SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+            sqlConnection.Open();
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+
+                parking.Id = Convert.ToInt32(sqlDataReader["Id"]);
+                parking.ParkingSLot = Convert.ToInt32(sqlDataReader["ParkingSlot"]);
+                parking.VehicleNumber = sqlDataReader["VehicleNumber"].ToString();
+                parking.EntryTime = sqlDataReader["EntryTime"].ToString();
+                parking.VehicleId = Convert.ToInt32(sqlDataReader["VehicleId"]);
+                parking.ParkingId = Convert.ToInt32(sqlDataReader["ParkingId"]);
+                parking.RolesId = Convert.ToInt32(sqlDataReader["RoleId"]);
+                parking.Disabled = Convert.ToBoolean(sqlDataReader["Disabled"]);
+                parking.ExitTime = sqlDataReader["ExitTime"].ToString();
+                parking.Charges = Convert.ToInt32(sqlDataReader["Charges"]);
+            }
+            return parking;
+        }
     }
 }

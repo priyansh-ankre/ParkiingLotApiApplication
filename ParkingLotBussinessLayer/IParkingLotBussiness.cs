@@ -12,5 +12,7 @@ namespace ParkingLotBussinessLayer
         public void AddVehicleTypeData(VehicleType vehicleType);
         public void DeleteParkingData(int parkingSlot);
         public void DeleteUserTypeData(int userId);
+        public object GetParkingDataByVehicleNumber(string vehicleNumber);
+        public object GetParkingDataByParkingSlot(string parkingSlot);
     }
 }

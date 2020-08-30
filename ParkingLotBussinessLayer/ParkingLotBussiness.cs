@@ -46,5 +46,15 @@ namespace ParkingLotBussinessLayer
         {
             parkingLot.DeleteUserTypeData(userId);
         }
+
+        public object GetParkingDataByVehicleNumber(string vehicleNumber)
+        {
+            return parkingLot.GetParkingDataByVehicleNumber(vehicleNumber);
+        }
+
+        public object GetParkingDataByParkingSlot(string parkingSlot)
+        {
+            return parkingLot.GetParkingDataByParkingSlot(parkingSlot);
+        }
     }
 }

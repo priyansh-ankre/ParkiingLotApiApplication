@@ -13,5 +13,7 @@ namespace ParkingLotRepositoryLayer
         public void AddVehicleTypeData(VehicleType vehicleType);
         public void DeleteParkingData(int parkingSlot);
         public void DeleteUserTypeData(int userId);
+        public Parking GetParkingDataByVehicleNumber(string vehicleNumber);
+        public Parking GetParkingDataByParkingSlot(string parkingSlot);
     }
 }
