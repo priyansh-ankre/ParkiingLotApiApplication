@@ -41,6 +41,18 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPost]
+        [Route("GetAllParkingData")]
+        public IActionResult GetAllParkingData()
+        {
+            var getResult = this.parkingLotBussiness.GetAllParkingData();
+            if (getResult != null)
+            {
+                return this.Ok(getResult);
+            }
+            return this.BadRequest();
+        }
+
+        [HttpPost]
         [Route("GetParkingByVehicleNumber")]
         public IActionResult GetParkingDataByVehicleNumber(string vehicleNumber)
         {
