@@ -1,18 +1,20 @@
 ﻿using ParkingLotModelLayer;
+using System.Collections.Generic;
 
 namespace ParkingLotBussinessLayer
 {
     public interface IParkingLotBussiness
     {
-        public object GetAllParkingData();
-        public void AddParkingData(Parking parking);
-        public void AddParkingTypeData(ParkingType parkingType);
-        public void AddRolesData(Roles roles);
-        public void AddUserTypeData(UserType userType);
-        public void AddVehicleTypeData(VehicleType vehicleType);
-        public void DeleteParkingData(int parkingSlot);
-        public void DeleteUserTypeData(int userId);
-        public object GetParkingDataByVehicleNumber(string vehicleNumber);
-        public object GetParkingDataByParkingSlot(string parkingSlot);
+        IEnumerable<Parking> GetAllParkingData();
+        Parking AddParkingData(Parking parking);
+        ParkingType AddParkingTypeData(ParkingType parkingType);
+        Roles AddRolesData(Roles roles);
+        UserType AddUserTypeData(UserType userType);
+        VehicleType AddVehicleTypeData(VehicleType vehicleType);
+        object DeleteParkingData(int parkingSlot);
+        object DeleteUserTypeData(int userId);
+        Parking GetParkingDataByVehicleNumber(string vehicleNumber);
+        Parking GetParkingDataByParkingSlot(int parkingSlot);
+        object Unparking(int parkingSlot);
     }
 }

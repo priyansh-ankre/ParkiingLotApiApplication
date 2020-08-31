@@ -41,12 +41,11 @@ namespace ParkingLotRepositoryLayer
             return parkingList;
         }
 
-        public void AddParkingData(Parking parking)
+        public Parking AddParkingData(Parking parking)
         {
             SqlCommand sqlCommand = new SqlCommand("spAddParkingData(Parking)", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
-            sqlCommand.Parameters.AddWithValue("@Id", parking.Id);
             sqlCommand.Parameters.AddWithValue("@ParkingSLot", parking.ParkingSLot);
             sqlCommand.Parameters.AddWithValue("@VehicleNumber", parking.VehicleNumber);
             sqlCommand.Parameters.AddWithValue("@EntryTime", parking.EntryTime);
@@ -58,11 +57,12 @@ namespace ParkingLotRepositoryLayer
             sqlCommand.Parameters.AddWithValue("@Charges", parking.Charges);
 
             sqlConnection.Open();
-            sqlCommand.ExecuteNonQuery();
+            int i = sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
+            return parking;
         }
 
-        public void AddParkingTypeData(ParkingType parkingType)
+        public ParkingType AddParkingTypeData(ParkingType parkingType)
         {
             SqlCommand sqlCommand = new SqlCommand("spAddParkingTypeData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -72,9 +72,10 @@ namespace ParkingLotRepositoryLayer
             sqlConnection.Open();
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
+            return parkingType;
         }
 
-        public void AddRolesData(Roles roles)
+        public Roles AddRolesData(Roles roles)
         {
             SqlCommand sqlCommand = new SqlCommand("spAddRolesData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -84,9 +85,10 @@ namespace ParkingLotRepositoryLayer
             sqlConnection.Open();
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
+            return roles;
         }
 
-        public void AddUserTypeData(UserType userType)
+        public UserType AddUserTypeData(UserType userType)
         {
             SqlCommand sqlCommand = new SqlCommand("spAddUserTypeData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -98,9 +100,10 @@ namespace ParkingLotRepositoryLayer
             sqlConnection.Open();
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
+            return userType;
         }
 
-        public void AddVehicleTypeData(VehicleType vehicleType)
+        public VehicleType AddVehicleTypeData(VehicleType vehicleType)
         {
             SqlCommand sqlCommand = new SqlCommand("spAddVehicleTypeData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -110,9 +113,10 @@ namespace ParkingLotRepositoryLayer
             sqlConnection.Open();
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
+            return vehicleType;
         }
 
-        public void DeleteParkingData(int parkingSlot)
+        public object DeleteParkingData(int parkingSlot)
         {
             SqlCommand sqlCommand = new SqlCommand("spDeleteParkingData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -120,11 +124,12 @@ namespace ParkingLotRepositoryLayer
             sqlCommand.Parameters.AddWithValue("@ParkingSlot", parkingSlot);
 
             sqlConnection.Open();
-            sqlCommand.ExecuteNonQuery();
+            var result = sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
+            return result;
         }
 
-        public void DeleteUserTypeData(int userId)
+        public object DeleteUserTypeData(int userId)
         {
             SqlCommand sqlCommand = new SqlCommand("spDeleteUserTypeData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -132,10 +137,11 @@ namespace ParkingLotRepositoryLayer
             sqlCommand.Parameters.AddWithValue("@UserId", userId);
 
             sqlConnection.Open();
-            sqlCommand.ExecuteNonQuery();
+            var result = sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
+            return result;
         }
-
+        
         public Parking GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             Parking parking = new Parking();
@@ -162,7 +168,7 @@ namespace ParkingLotRepositoryLayer
             return parking;
         }
 
-        public Parking GetParkingDataByParkingSlot(string parkingSlot)
+        public Parking GetParkingDataByParkingSlot(int parkingSlot)
         {
             Parking parking = new Parking();
             string sqlQuery = "Select * From Parking Where VehicleNumber=" + parkingSlot;
@@ -186,6 +192,19 @@ namespace ParkingLotRepositoryLayer
                 parking.Charges = Convert.ToInt32(sqlDataReader["Charges"]);
             }
             return parking;
+        }
+
+        public object Unparking(int parkingSlot)
+        {
+            SqlCommand sqlCommand = new SqlCommand("spUnparking", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+
+            sqlCommand.Parameters.AddWithValue("@ParkingSlot", parkingSlot);
+
+            sqlConnection.Open();
+            var result = sqlCommand.ExecuteNonQuery();
+            sqlConnection.Close();
+            return result;
         }
     }
 }

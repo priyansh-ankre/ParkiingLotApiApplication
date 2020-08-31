@@ -1,60 +1,70 @@
 ﻿using ParkingLotModelLayer;
 using ParkingLotRepositoryLayer;
+using System.Collections.Generic;
 
 namespace ParkingLotBussinessLayer
 {
     public class ParkingLotBussiness : IParkingLotBussiness
     {
         public readonly IParkingLotRepository parkingLot;
+        public ParkingLotBussiness(IParkingLotRepository parkingLot)
+        {
+            this.parkingLot = parkingLot;
+        }
 
-        public object GetAllParkingData()
+        public IEnumerable<Parking> GetAllParkingData()
         {
             return parkingLot.GetAllParkingData();
         }
 
-        public void AddParkingData(Parking parking)
+        public Parking AddParkingData(Parking parking)
         {
-            parkingLot.AddParkingData(parking);
+            return parkingLot.AddParkingData(parking);
         }
 
-        public void AddParkingTypeData(ParkingType parkingType)
+        public ParkingType AddParkingTypeData(ParkingType parkingType)
         {
-            parkingLot.AddParkingTypeData(parkingType);
+            return parkingLot.AddParkingTypeData(parkingType);
         }
 
-        public void AddRolesData(Roles roles)
+        public Roles AddRolesData(Roles roles)
         {
-            parkingLot.AddRolesData(roles);
+            return parkingLot.AddRolesData(roles);
         }
         
-        public void AddUserTypeData(UserType userType)
+        public UserType AddUserTypeData(UserType userType)
         {
-            parkingLot.AddUserTypeData(userType);
+            return parkingLot.AddUserTypeData(userType);
         }
         
-        public void AddVehicleTypeData(VehicleType vehicleType)
+        public VehicleType AddVehicleTypeData(VehicleType vehicleType)
         {
-            parkingLot.AddVehicleTypeData(vehicleType);
+            return parkingLot.AddVehicleTypeData(vehicleType);
         }
         
-        public void DeleteParkingData(int parkingSlot)
+        public object DeleteParkingData(int parkingSlot)
         {
-            parkingLot.DeleteParkingData(parkingSlot);
+            return parkingLot.DeleteParkingData(parkingSlot);
         }
         
-        public void DeleteUserTypeData(int userId)
+        public object DeleteUserTypeData(int userId)
         {
-            parkingLot.DeleteUserTypeData(userId);
+            return parkingLot.DeleteUserTypeData(userId);
         }
 
-        public object GetParkingDataByVehicleNumber(string vehicleNumber)
+        public Parking GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             return parkingLot.GetParkingDataByVehicleNumber(vehicleNumber);
         }
 
-        public object GetParkingDataByParkingSlot(string parkingSlot)
+        public Parking GetParkingDataByParkingSlot(int parkingSlot)
         {
             return parkingLot.GetParkingDataByParkingSlot(parkingSlot);
+        }
+
+        public object Unparking(int parkingSlot)
+        {
+            return parkingLot.Unparking(parkingSlot);
         }
     }
 }
