@@ -32,11 +32,6 @@ namespace ParkingLotBussinessLayer
             return parkingLot.AddRolesData(roles);
         }
         
-        public UserType AddUserTypeData(UserType userType)
-        {
-            return parkingLot.AddUserTypeData(userType);
-        }
-        
         public VehicleType AddVehicleTypeData(VehicleType vehicleType)
         {
             return parkingLot.AddVehicleTypeData(vehicleType);
@@ -51,13 +46,7 @@ namespace ParkingLotBussinessLayer
         {
             return parkingLot.DeleteAllUnParkedData();
         }
-
-
-        public object DeleteUserTypeData(int userId)
-        {
-            return parkingLot.DeleteUserTypeData(userId);
-        }
-
+        
         public Parking GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             return parkingLot.GetParkingDataByVehicleNumber(vehicleNumber);

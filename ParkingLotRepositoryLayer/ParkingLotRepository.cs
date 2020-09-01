@@ -88,21 +88,6 @@ namespace ParkingLotRepositoryLayer
             return roles;
         }
 
-        public UserType AddUserTypeData(UserType userType)
-        {
-            SqlCommand sqlCommand = new SqlCommand("spAddUserTypeData", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-
-            sqlCommand.Parameters.AddWithValue("Email", userType.Email);
-            sqlCommand.Parameters.AddWithValue("Password", userType.Password);
-            sqlCommand.Parameters.AddWithValue("Role", userType.Role);
-
-            sqlConnection.Open();
-            sqlCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-            return userType;
-        }
-
         public VehicleType AddVehicleTypeData(VehicleType vehicleType)
         {
             SqlCommand sqlCommand = new SqlCommand("spAddVehicleTypeData", sqlConnection);
@@ -140,19 +125,6 @@ namespace ParkingLotRepositoryLayer
             return result;
         }
 
-        public object DeleteUserTypeData(int userId)
-        {
-            SqlCommand sqlCommand = new SqlCommand("spDeleteUserTypeData", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-
-            sqlCommand.Parameters.AddWithValue("@UserId", userId);
-
-            sqlConnection.Open();
-            var result = sqlCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-            return result;
-        }
-        
         public Parking GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             Parking parking = new Parking();
