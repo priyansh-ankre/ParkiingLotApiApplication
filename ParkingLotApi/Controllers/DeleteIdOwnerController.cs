@@ -5,23 +5,23 @@ namespace ParkingLotApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DeleteOwnerController : ControllerBase
+    public class DeleteIdOwnerController : ControllerBase
     {
         private readonly IParkingLotBussiness parkingLotBussiness;
-        public DeleteOwnerController(IParkingLotBussiness parkingLotBussiness)
+        public DeleteIdOwnerController(IParkingLotBussiness parkingLotBussiness)
         {
             this.parkingLotBussiness = parkingLotBussiness;
         }
 
         [HttpDelete]
-        public IActionResult DeleteAllUnparkedData()
+        public IActionResult DeleteParkingDataByParkingSlot(int parkingSlot)
         {
-            var deleteResult = this.parkingLotBussiness.DeleteAllUnParkedData();
-            if(deleteResult != null)
+            var deleteResult = parkingLotBussiness.DeleteParkingDataByParkingSlot(parkingSlot);
+            if (deleteResult != null)
             {
                 return this.Ok(deleteResult);
             }
             return this.BadRequest();
-        } 
+        }
     }
 }
