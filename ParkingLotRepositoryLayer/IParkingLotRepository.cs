@@ -11,7 +11,8 @@ namespace ParkingLotRepositoryLayer
         Roles AddRolesData(Roles roles);
         UserType AddUserTypeData(UserType userType);
         VehicleType AddVehicleTypeData(VehicleType vehicleType);
-        object DeleteParkingData(int parkingSlot);
+        object DeleteParkingDataByParkingSlot(int parkingSlot);
+        object DeleteAllUnParkedData();
         object DeleteUserTypeData(int userId);
         Parking GetParkingDataByVehicleNumber(string vehicleNumber);
         Parking GetParkingDataByParkingSlot(int parkingSlot);

@@ -42,11 +42,17 @@ namespace ParkingLotBussinessLayer
             return parkingLot.AddVehicleTypeData(vehicleType);
         }
         
-        public object DeleteParkingData(int parkingSlot)
+        public object DeleteParkingDataByParkingSlot(int parkingSlot)
         {
-            return parkingLot.DeleteParkingData(parkingSlot);
+            return parkingLot.DeleteParkingDataByParkingSlot(parkingSlot);
         }
-        
+
+        public object DeleteAllUnParkedData()
+        {
+            return parkingLot.DeleteAllUnParkedData();
+        }
+
+
         public object DeleteUserTypeData(int userId)
         {
             return parkingLot.DeleteUserTypeData(userId);

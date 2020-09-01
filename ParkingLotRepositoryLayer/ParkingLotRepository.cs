@@ -31,7 +31,7 @@ namespace ParkingLotRepositoryLayer
                 parking.EntryTime = sqlDataReader["EntryTime"].ToString();
                 parking.VehicleId = Convert.ToInt32(sqlDataReader["VehicleId"]);
                 parking.ParkingId = Convert.ToInt32(sqlDataReader["ParkingId"]);
-                parking.RolesId = Convert.ToInt32(sqlDataReader["RoleId"]);
+                parking.RolesId = Convert.ToInt32(sqlDataReader["RolesId"]);
                 parking.Disabled = Convert.ToBoolean(sqlDataReader["Disabled"]);
                 parking.ExitTime = sqlDataReader["ExitTime"].ToString();
                 parking.Charges = Convert.ToInt32(sqlDataReader["Charges"]);
@@ -116,12 +116,23 @@ namespace ParkingLotRepositoryLayer
             return vehicleType;
         }
 
-        public object DeleteParkingData(int parkingSlot)
+        public object DeleteParkingDataByParkingSlot(int parkingSlot)
         {
-            SqlCommand sqlCommand = new SqlCommand("spDeleteParkingData", sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand("spDeleteParkingDataByParkingSlot", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
             sqlCommand.Parameters.AddWithValue("@ParkingSlot", parkingSlot);
+
+            sqlConnection.Open();
+            var result = sqlCommand.ExecuteNonQuery();
+            sqlConnection.Close();
+            return result;
+        }
+
+        public object DeleteAllUnParkedData()
+        {
+            SqlCommand sqlCommand = new SqlCommand("[spDeleteAllUnParkedData]", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
 
             sqlConnection.Open();
             var result = sqlCommand.ExecuteNonQuery();

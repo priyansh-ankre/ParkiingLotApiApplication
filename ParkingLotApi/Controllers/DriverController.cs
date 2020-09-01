@@ -26,8 +26,7 @@ namespace ParkingLotApi.Controllers
             return this.BadRequest();
         }
 
-        [HttpPost]
-        [Route("Unparking")]
+        [HttpPut]
         public IActionResult Unparking(int parkingSlotId)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlotId);

@@ -26,8 +26,7 @@ namespace ParkingLotApi.Controllers
             return this.BadRequest();
         }
 
-        [HttpPost]
-        [Route("Unparking")]
+        [HttpPut]
         public IActionResult Unparking(int parkingSlotId)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlotId);
@@ -38,7 +37,7 @@ namespace ParkingLotApi.Controllers
             return this.BadRequest();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetParkingByVehicleNumber")]
         public IActionResult GetParkingDataByVehicleNumber(string vehicleNumber)
         {
@@ -50,8 +49,8 @@ namespace ParkingLotApi.Controllers
             return this.BadRequest();
         }
 
-        [HttpPost]
-        [Route("GetParkingByParkingSlot")]
+        [HttpGet]
+        [Route("{GetParkingByParkingSlot}")]
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);
