@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,19 @@ namespace ParkingLotApi.Controllers
         {
 
             var parkingResult = this.parkingLotBussiness.AddParkingData(parking);
-            if (parkingResult != null)
+            try
             {
-                return this.Ok(parkingResult);
+                if (parkingResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", parkingResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpPut]
@@ -36,11 +45,19 @@ namespace ParkingLotApi.Controllers
         public IActionResult Unparking(int parkingSlotId)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlotId);
-            if (unparkingResult != null)
+            try
             {
-                return this.Ok(unparkingResult);
+                if (unparkingResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", unparkingResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpGet]
@@ -48,11 +65,19 @@ namespace ParkingLotApi.Controllers
         public IActionResult GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByVehicleNumber(vehicleNumber);
-            if (getResult != null)
+            try
             {
-                return this.Ok(getResult);
+                if (getResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpGet]
@@ -60,11 +85,19 @@ namespace ParkingLotApi.Controllers
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);
-            if (getResult != null)
+            try
             {
-                return this.Ok(getResult);
+                if (getResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
     }
 }

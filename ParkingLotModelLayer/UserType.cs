@@ -13,7 +13,7 @@ namespace ParkingLotModelLayer
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Wrong Field Name Please Write Password")]
-        [RegularExpression(@"^([a - zA - Z0 - 9]) *[!@#$%^&*]{1}([a-zA-Z0-9])*$")]
+        //[RegularExpression(@"^[A-Z]{1}[a-z]")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Wrong Field Name Please Write UserType")]

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParkingLotBussinessLayer;
 using ParkingLotModelLayer;
+using System;
+using System.Net;
 
 namespace ParkingLotApi.Controllers
 {
@@ -19,22 +21,38 @@ namespace ParkingLotApi.Controllers
         {
 
             var parkingResult = this.parkingLotBussiness.AddParkingData(parking);
-            if (parkingResult != null)
+            try
             {
-                return this.Ok(parkingResult);
+                if (parkingResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", parkingResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpPut]
         public IActionResult Unparking(int parkingSlotId)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlotId);
-            if (unparkingResult != null)
+            try
             {
-                return this.Ok(unparkingResult);
+                if (unparkingResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", parkingResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
     }
 }

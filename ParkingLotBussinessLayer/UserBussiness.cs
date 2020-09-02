@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using ParkingLotRepositoryLayer;
 using ParkingLotModelLayer;
+using ParkingLotBussinessLayer;
 
 namespace userRepositoryBussinessLayer
 {
-    public class UserBussiness
+    public class UserBussiness : IUserBussiness
     {
         public readonly IUserRepository userRepository;
         public UserBussiness(IUserRepository userRepository)

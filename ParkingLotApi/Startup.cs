@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ParkingLotBussinessLayer;
 using ParkingLotRepositoryLayer;
+using Swashbuckle.AspNetCore.Swagger;
+using userRepositoryBussinessLayer;
 
 namespace ParkingLotApi
 {
@@ -29,7 +31,19 @@ namespace ParkingLotApi
         {
             services.AddTransient<IParkingLotBussiness, ParkingLotBussiness>();
             services.AddTransient<IParkingLotRepository, ParkingLotRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserBussiness, UserBussiness>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "My API",
+                    Description = "Parking Lot ASP.NET(CORE) Web Api's"
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +60,11 @@ namespace ParkingLotApi
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }

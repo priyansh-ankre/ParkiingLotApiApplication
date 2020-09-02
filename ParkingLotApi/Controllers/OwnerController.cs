@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParkingLotBussinessLayer;
 using ParkingLotModelLayer;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System;
+using System.Net;
 
 namespace ParkingLotApi.Controllers
 {
@@ -19,35 +19,58 @@ namespace ParkingLotApi.Controllers
         [HttpPost]
         public IActionResult AddParking(Parking parking)
         {
-
             var parkingResult = this.parkingLotBussiness.AddParkingData(parking);
-            if (parkingResult != null)
+            try
             {
-                return this.Ok(parkingResult);
+                if (parkingResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK,"List of Parking Data",parkingResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpPut]
         public IActionResult Unparking(int parkingSlotId)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlotId);
-            if(unparkingResult != null)
+            try
             {
-                return this.Ok(unparkingResult);
+                if (unparkingResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", unparkingResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpGet]
         public IActionResult GetAllParkingData()
         {
             var getResult = this.parkingLotBussiness.GetAllParkingData();
-            if (getResult != null)
+            try
             {
-                return this.Ok(getResult);
+                if (getResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpGet]
@@ -55,11 +78,19 @@ namespace ParkingLotApi.Controllers
         public IActionResult GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByVehicleNumber(vehicleNumber);
-            if(getResult != null)
+            try
             {
-                return this.Ok(getResult);
+                if (getResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
 
         [HttpGet]
@@ -67,11 +98,59 @@ namespace ParkingLotApi.Controllers
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);
-            if (getResult != null)
+            try
             {
-                return this.Ok(getResult);
+                if (getResult != null)
+                {
+                    return this.Ok(getResult);
+                }
+                return this.NotFound();
             }
-            return this.BadRequest();
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
+        }
+
+        [HttpDelete]
+        [Route("DeleteAllUnparkedData")]
+        public IActionResult DeleteAllUnparkedData()
+        {
+            var deleteResult = this.parkingLotBussiness.DeleteAllUnParkedData();
+            try
+            {
+                if (deleteResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", deleteResult));
+                }
+                return this.NotFound();
+            }
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
+        }
+
+        [HttpDelete]
+        [Route("DeleteParkingDataByParkingSlot")]
+        public IActionResult DeleteParkingDataByParkingSlot(int parkingSlot)
+        {
+            var deleteResult = parkingLotBussiness.DeleteParkingDataByParkingSlot(parkingSlot);
+            try
+            {
+                if (deleteResult != null)
+                {
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", deleteResult));
+                }
+                return this.NotFound();
+            }
+            catch (Exception)
+            {
+
+                return this.BadRequest();
+            }
         }
     }
 }

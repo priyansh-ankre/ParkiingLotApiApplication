@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ParkingLotModelLayer;
 using ParkingLotRepositoryLayer;
+using System.Net;
 
 namespace ParkingLotApi.Controllers
 {
@@ -23,33 +19,57 @@ namespace ParkingLotApi.Controllers
         public IActionResult GetUsers()
         {
             var userResult = userRepository.GetUsers();
-            if(userResult != null)
+            try
             {
-                return Ok(userResult);
+                if (userResult != null)
+                {
+                    return Ok(new Response(HttpStatusCode.OK, "List of User", userResult));
+                }
+                return NotFound();
             }
-            return BadRequest();
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         public IActionResult AddUserTypeData(UserType userType)
         {
             var userResult = userRepository.AddUserTypeData(userType);
-            if (userResult != null)
+            try
             {
-                return Ok(userResult);
+                if (userResult != null)
+                {
+                    return Ok(new Response(HttpStatusCode.OK, "List of User", userResult));
+                }
+                return NotFound();
             }
-            return BadRequest();
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         [HttpDelete]
         public IActionResult DeleteUserTypeData(int userId)
         {
             var userResult = userRepository.DeleteUserTypeData(userId);
-            if (userResult != null)
+            try
             {
-                return Ok(userResult);
+                if (userResult != null)
+                {
+                    return Ok(new Response(HttpStatusCode.OK, "List of User", userResult));
+                }
+                return NotFound();
             }
-            return BadRequest();
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
     }
 }

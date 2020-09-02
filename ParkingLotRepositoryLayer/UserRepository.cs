@@ -1,4 +1,5 @@
-﻿using ParkingLotModelLayer;
+﻿using Microsoft.Extensions.Configuration;
+using ParkingLotModelLayer;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -7,9 +8,15 @@ namespace ParkingLotRepositoryLayer
 {
     public class UserRepository : IUserRepository
     {
-        public static readonly string connectionString = "Server=(LocalDB)\\MSSQLLocalDB;Database=ParkingLotDatabase;Trusted_Connection=True";
-
-        SqlConnection sqlConnection = new SqlConnection(connectionString);
+        private readonly IConfiguration configuration;
+        private readonly string connectionString;
+        private readonly SqlConnection sqlConnection;
+        public UserRepository(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            this.connectionString = this.configuration.GetConnectionString("UserDbConnection");
+            this.sqlConnection = new SqlConnection(connectionString);
+        }
 
         public IEnumerable<UserType> GetUsers()
         {
