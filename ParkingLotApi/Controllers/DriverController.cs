@@ -44,7 +44,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (unparkingResult != null)
                 {
-                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", parkingResult));
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", unparkingResult));
                 }
                 return this.NotFound();
             }

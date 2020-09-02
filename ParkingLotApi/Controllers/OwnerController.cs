@@ -94,7 +94,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetParkingByParkingSlot")]
+        [Route("{GetParkingByParkingSlot}")]
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);
@@ -134,7 +134,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteParkingDataByParkingSlot")]
+        [Route("{DeleteParkingDataByParkingSlot}")]
         public IActionResult DeleteParkingDataByParkingSlot(int parkingSlot)
         {
             var deleteResult = parkingLotBussiness.DeleteParkingDataByParkingSlot(parkingSlot);
