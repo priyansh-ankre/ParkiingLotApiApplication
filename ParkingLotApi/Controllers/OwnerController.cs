@@ -24,14 +24,14 @@ namespace ParkingLotApi.Controllers
             {
                 if (parkingResult != null)
                 {
-                    return this.Ok(new Response(HttpStatusCode.OK,"List of Parking Data",parkingResult));
+                    return this.Ok(new Response(HttpStatusCode.Created,"List of Parking Data",parkingResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", parkingResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be displayed", null));
             }
         }
 
@@ -45,12 +45,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", unparkingResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", unparkingResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be displayed", null));
             }
         }
 
@@ -64,12 +64,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", getResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be Displayed", null));
             }
         }
 
@@ -84,12 +84,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", getResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be Displayed", null));
             }
         }
 
@@ -102,14 +102,14 @@ namespace ParkingLotApi.Controllers
             {
                 if (getResult != null)
                 {
-                    return this.Ok(getResult);
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", getResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be displayed", null));
             }
         }
 
@@ -124,12 +124,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", deleteResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", deleteResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be diplayed", null));
             }
         }
 
@@ -144,12 +144,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", deleteResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", deleteResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be displayed", null));
             }
         }
     }

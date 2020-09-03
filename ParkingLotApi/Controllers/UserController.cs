@@ -25,12 +25,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return Ok(new Response(HttpStatusCode.OK, "List of User", userResult));
                 }
-                return NotFound();
+                return NotFound(new Response(HttpStatusCode.NotFound, "List of User is Not Found", userResult));
             }
             catch (System.Exception)
             {
 
-                return BadRequest();
+                return BadRequest(new Response(HttpStatusCode.BadRequest, "List of User cannot be displayed", null));
             }
         }
 
@@ -44,12 +44,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return Ok(new Response(HttpStatusCode.OK, "List of User", userResult));
                 }
-                return NotFound();
+                return NotFound(new Response(HttpStatusCode.NotFound, "List of User is Not Found", userResult));
             }
             catch (System.Exception)
             {
 
-                return BadRequest();
+                return BadRequest(new Response(HttpStatusCode.BadRequest, "List of User cannot be dsplayed", null));
             }
         }
 

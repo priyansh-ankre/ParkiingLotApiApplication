@@ -31,17 +31,16 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", parkingResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", parkingResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be displayed", null));
             }
         }
 
         [HttpPut]
-        [Route("Unparking")]
         public IActionResult Unparking(int parkingSlotId)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlotId);
@@ -51,12 +50,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", unparkingResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", unparkingResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be diplayed", null));
             }
         }
 
@@ -71,12 +70,12 @@ namespace ParkingLotApi.Controllers
                 {
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
                 }
-                return this.NotFound();
+                return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", getResult));
             }
             catch (Exception)
             {
 
-                return this.BadRequest();
+                return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be diplayed", null));
             }
         }
 
