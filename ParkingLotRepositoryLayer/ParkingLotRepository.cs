@@ -64,7 +64,7 @@ namespace ParkingLotRepositoryLayer
             sqlCommand.Parameters.AddWithValue("@Charges", parking.Charges);
 
             sqlConnection.Open();
-            int i = sqlCommand.ExecuteNonQuery();
+            sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
             return parking;
         }
