@@ -27,5 +27,10 @@ namespace userRepositoryBussinessLayer
         {
             return userRepository.DeleteUserTypeData(userId);
         }
+
+        public IEnumerable<UserLogin> UserLogin()
+        {
+            return userRepository.UserLogin();
+        }
     }
 }

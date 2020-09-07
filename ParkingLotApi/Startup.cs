@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,8 +12,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using ParkingLotBussinessLayer;
 using ParkingLotRepositoryLayer;
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 using userRepositoryBussinessLayer;
 
@@ -33,16 +37,34 @@ namespace ParkingLotApi
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserBussiness, UserBussiness>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new Info
+                options.SwaggerDoc("v1", new Info
                 {
                     Version = "v1",
                     Title = "PARKING LOT API",
                     Description = "Parking Lot ASP.NET(CORE) Web Api's"
                 });
+                options.AddSecurityDefinition("oauth2", new ApiKeyScheme
+                {
+                    Description = "Using the jwt bearer token",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
-
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+              .AddJwtBearer(options =>
+              {
+                  var serverSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:key"]));
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      IssuerSigningKey = serverSecret,
+                      ValidIssuer = Configuration["JWT:Issuer"],
+                      ValidAudience = Configuration["JWT:Audience"]
+                  };
+              });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -63,6 +85,7 @@ namespace ParkingLotApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "PARKING LOT API V1");
             });
+            app.UseAuthentication();
         }
     }
 }

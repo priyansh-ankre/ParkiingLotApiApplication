@@ -8,5 +8,6 @@ namespace ParkingLotBussinessLayer
         IEnumerable<UserType> GetUsers();
         UserType AddUserTypeData(UserType userType);
         object DeleteUserTypeData(int userId);
+        IEnumerable<UserLogin> UserLogin();
     }
 }

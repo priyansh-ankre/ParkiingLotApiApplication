@@ -44,6 +44,28 @@ namespace ParkingLotRepositoryLayer
             return userTypesList;
         }
 
+        public IEnumerable<UserLogin> UserLogin()
+        {
+            List<UserLogin> userTypesList = new List<UserLogin>();
+
+            SqlCommand sqlCommand = new SqlCommand("spGetUserTypeData", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+
+            sqlConnection.Open();
+            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                UserLogin userType = new UserLogin();
+
+                userType.Email = sqlDataReader["Email"].ToString();
+                userType.Password = sqlDataReader["Password"].ToString();
+
+                userTypesList.Add(userType);
+            }
+            return userTypesList;
+        }
+
         public string EncodePassword(string password)
         {
             try
