@@ -45,30 +45,34 @@ namespace ParkingLotApi
                     Title = "PARKING LOT API",
                     Description = "Parking Lot ASP.NET(CORE) Web Api's"
                 });
-                options.AddSecurityDefinition("oauth2", new ApiKeyScheme
+                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 {
                     Description = "Using the jwt bearer token",
                     Name = "Authorization",
                     In = "header",
                     Type = "apiKey"
                 });
-                options.OperationFilter<SecurityRequirementsOperationFilter>();
+                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    { "Bearer", new string[] { } }
+                });
             });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-              .AddJwtBearer(options =>
-              {
-                  var serverSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:key"]));
-                  options.TokenValidationParameters = new TokenValidationParameters
+                  .AddJwtBearer(options =>
                   {
-                      IssuerSigningKey = serverSecret,
-                      ValidIssuer = Configuration["JWT:Issuer"],
-                      ValidAudience = Configuration["JWT:Audience"]
-                  };
-              });
+                      var serverSecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]));
+                      options.TokenValidationParameters = new TokenValidationParameters
+                      {
+                          IssuerSigningKey = serverSecret,
+                          ValidIssuer = Configuration["JWT:Issuer"],
+                          ValidAudience = Configuration["JWT:Audience"]
+                      };
+                  });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -78,13 +82,14 @@ namespace ParkingLotApi
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "PARKING LOT API V1");
             });
+            
+            app.UseHttpsRedirection();
+            app.UseMvc();
             app.UseAuthentication();
         }
     }

@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ParkingLotModelLayer;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace ParkingLotRepositoryLayer
@@ -18,6 +21,32 @@ namespace ParkingLotRepositoryLayer
             this.configuration = configuration;
             this.connectionString = this.configuration.GetConnectionString("UserDbConnection");
             this.sqlConnection = new SqlConnection(connectionString);
+        }
+
+        public string GenerateToken(UserLogin login)
+        {
+
+            try
+            {
+                var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+
+                var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Role, login.Role));
+                claims.Add(new Claim("Email", login.Email.ToString()));
+                claims.Add(new Claim("Password", login.Password.ToString()));
+                var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
+                    configuration["Jwt:Issuer"],
+                    claims,
+                    expires: DateTime.Now.AddHours(120),
+                    signingCredentials: signingCreds);
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public IEnumerable<UserType> GetUsers()
@@ -44,26 +73,25 @@ namespace ParkingLotRepositoryLayer
             return userTypesList;
         }
 
-        public IEnumerable<UserLogin> UserLogin()
+        public int UserLogin(UserLogin login)
         {
-            List<UserLogin> userTypesList = new List<UserLogin>();
+            int count = 0;
 
-            SqlCommand sqlCommand = new SqlCommand("spGetUserTypeData", sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand("spUserLoginData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
-
+            var encodedPassword = this.EncodePassword(login.Password);
+            sqlCommand.Parameters.AddWithValue("Email", login.Email);
+            sqlCommand.Parameters.AddWithValue("Password", encodedPassword);
+            sqlCommand.Parameters.AddWithValue("Role", login.Role);
             sqlConnection.Open();
+
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
             while (sqlDataReader.Read())
             {
-                UserLogin userType = new UserLogin();
-
-                userType.Email = sqlDataReader["Email"].ToString();
-                userType.Password = sqlDataReader["Password"].ToString();
-
-                userTypesList.Add(userType);
+                count++;
             }
-            return userTypesList;
+            return count;
         }
 
         public string EncodePassword(string password)

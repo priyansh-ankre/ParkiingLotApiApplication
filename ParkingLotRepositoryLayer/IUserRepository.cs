@@ -8,6 +8,7 @@ namespace ParkingLotRepositoryLayer
         IEnumerable<UserType> GetUsers();
         UserType AddUserTypeData(UserType userType);
         object DeleteUserTypeData(int userId);
-        IEnumerable<UserLogin> UserLogin();
+        int UserLogin(UserLogin login);
+        string GenerateToken(UserLogin login);
     }
 }

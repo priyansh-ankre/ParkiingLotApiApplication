@@ -57,9 +57,9 @@ namespace ParkingLotBussinessLayer
             return parkingLot.GetParkingDataByParkingSlot(parkingSlot);
         }
 
-        public object Unparking(int parkingSlot)
+        public object Unparking(int parkingSlot, string exitTime, int charges)
         {
-            return parkingLot.Unparking(parkingSlot);
+            return parkingLot.Unparking(parkingSlot,exitTime,charges);
         }
     }
 }

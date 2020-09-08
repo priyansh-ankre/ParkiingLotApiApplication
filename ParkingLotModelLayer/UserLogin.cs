@@ -14,5 +14,6 @@ namespace ParkingLotModelLayer
         [Required(ErrorMessage = "Wrong Field Name Please Write Password")]
         //[RegularExpression(@"^[A-Z]{1}[a-z]")]
         public string Password { get; set; }
+        public string Role { get; set; } 
     }
 }

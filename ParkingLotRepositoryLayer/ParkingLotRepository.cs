@@ -1,9 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ParkingLotModelLayer;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ParkingLotRepositoryLayer
 {
@@ -18,6 +22,8 @@ namespace ParkingLotRepositoryLayer
             this.connectionString = this.configuration.GetConnectionString("UserDbConnection");
             this.sqlConnection = new SqlConnection(connectionString);
         }
+
+        
 
         public IEnumerable<Parking> GetAllParkingData()
         {
@@ -135,8 +141,7 @@ namespace ParkingLotRepositoryLayer
         public Parking GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             Parking parking = new Parking();
-            string sqlQuery = "Select * From Parking Where VehicleNumber=" + vehicleNumber;
-            SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand("spGetParkingDataByParkingSlot", sqlConnection);
 
             sqlConnection.Open();
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
@@ -160,36 +165,50 @@ namespace ParkingLotRepositoryLayer
 
         public Parking GetParkingDataByParkingSlot(int parkingSlot)
         {
-            Parking parking = new Parking();
-            string sqlQuery = "Select * From Parking Where VehicleNumber=" + parkingSlot;
-            SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
-
-            sqlConnection.Open();
-            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-
-            while (sqlDataReader.Read())
+            try
             {
+                Parking parking = new Parking();
+                string sqlQuery = "Select * From Parking Where ParkingSlot=" + parkingSlot;
+                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
 
-                parking.Id = Convert.ToInt32(sqlDataReader["Id"]);
-                parking.ParkingSLot = Convert.ToInt32(sqlDataReader["ParkingSlot"]);
-                parking.VehicleNumber = sqlDataReader["VehicleNumber"].ToString();
-                parking.EntryTime = sqlDataReader["EntryTime"].ToString();
-                parking.VehicleId = Convert.ToInt32(sqlDataReader["VehicleId"]);
-                parking.ParkingId = Convert.ToInt32(sqlDataReader["ParkingId"]);
-                parking.RolesId = Convert.ToInt32(sqlDataReader["RoleId"]);
-                parking.Disabled = Convert.ToBoolean(sqlDataReader["Disabled"]);
-                parking.ExitTime = sqlDataReader["ExitTime"].ToString();
-                parking.Charges = Convert.ToInt32(sqlDataReader["Charges"]);
+                sqlConnection.Open();
+                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+                while (sqlDataReader.Read())
+                {
+
+                    parking.Id = Convert.ToInt32(sqlDataReader["Id"]);
+                    parking.ParkingSLot = Convert.ToInt32(sqlDataReader["ParkingSlot"]);
+                    parking.VehicleNumber = sqlDataReader["VehicleNumber"].ToString();
+                    parking.EntryTime = sqlDataReader["EntryTime"].ToString();
+                    parking.VehicleId = Convert.ToInt32(sqlDataReader["VehicleId"]);
+                    parking.ParkingId = Convert.ToInt32(sqlDataReader["ParkingId"]);
+                    parking.RolesId = Convert.ToInt32(sqlDataReader["RolesId"]);
+                    parking.Disabled = Convert.ToBoolean(sqlDataReader["Disabled"]);
+                    parking.ExitTime = sqlDataReader["ExitTime"].ToString();
+                    parking.Charges = Convert.ToInt32(sqlDataReader["Charges"]);
+                }
+                return parking;
             }
-            return parking;
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+           
         }
 
-        public object Unparking(int parkingSlot)
+        public object Unparking(int parkingSlot,string exitTime,int charges)
         {
             SqlCommand sqlCommand = new SqlCommand("spUnparking", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
             sqlCommand.Parameters.AddWithValue("@ParkingSlot", parkingSlot);
+            sqlCommand.Parameters.AddWithValue("@ExitTime", exitTime);
+            sqlCommand.Parameters.AddWithValue("@Charges", charges);
 
             sqlConnection.Open();
             var result = sqlCommand.ExecuteNonQuery();

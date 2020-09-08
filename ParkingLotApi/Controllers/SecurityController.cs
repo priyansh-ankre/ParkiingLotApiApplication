@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkingLotBussinessLayer;
 using ParkingLotModelLayer;
@@ -12,6 +9,8 @@ namespace ParkingLotApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme,Roles ="SECURITY,OWNER")]
+
     public class SecurityController : ControllerBase
     {
         private readonly IParkingLotBussiness parkingLotBussiness;
@@ -41,9 +40,9 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult Unparking(int parkingSlotId)
+        public IActionResult Unparking(int parkingSlot, string exitTime, int charges)
         {
-            var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlotId);
+            var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlot,exitTime,charges);
             try
             {
                 if (unparkingResult != null)
@@ -80,7 +79,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        [Route("{GetParkingByParkingSlot}")]
+        [Route("GetParkingByParkingSlot")]
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);

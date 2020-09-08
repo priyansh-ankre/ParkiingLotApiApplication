@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using ParkingLotModelLayer;
-using ParkingLotRepositoryLayer;
+using ParkingLotBussinessLayer;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 
 namespace ParkingLotApi.Controllers
 {
@@ -17,40 +11,16 @@ namespace ParkingLotApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public readonly IUserRepository userRepository;
-        public readonly IConfiguration config;
-        public UserController(IUserRepository userRepository, IConfiguration config)
+        public readonly IUserBussiness buissenessLayer;
+        public UserController(IUserBussiness buissenessLayer )
         {
-            this.userRepository = userRepository;
-            this.config = config;
-        }
-
-        private string GenerateToken(IEnumerable<UserLogin> login)
-        {
-
-            try
-            {
-                var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
-
-                var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(config["Jwt:Issuer"],
-                    config["Jwt:Issuer"],
-                    expires: DateTime.Now.AddHours(120),
-                    signingCredentials: signingCreds);
-                return new JwtSecurityTokenHandler().WriteToken(token);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            this.buissenessLayer = buissenessLayer;
         }
 
         [HttpGet]
-        //[Authorize(Roles ="OWNER")]
         public IActionResult GetUsers()
         {
-            var userResult = userRepository.GetUsers();
+            var userResult = buissenessLayer.GetUsers();
             try
             {
                 if (userResult != null)
@@ -67,16 +37,16 @@ namespace ParkingLotApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route(nameof(UserLogin))]
-        public IActionResult UserLogin()
+        public IActionResult UserLogin(UserLogin login)
         {
-            var userResult = userRepository.UserLogin();
+            var userResult = buissenessLayer.UserLogin(login);
             try
             {
-                if (userResult != null)
+                if (userResult != 0)
                 {
-                    var tokenString = GenerateToken(userResult);
+                    var tokenString = buissenessLayer.GenerateToken(login);
                     return Ok(new Response(HttpStatusCode.OK, "List of Users Login", tokenString));
                 }
                 return NotFound(new Response(HttpStatusCode.NotFound, "List of User Login is Not Found", userResult));
@@ -91,7 +61,7 @@ namespace ParkingLotApi.Controllers
         [HttpPost]
         public IActionResult AddUserTypeData(UserType userType)
         {
-            var userResult = userRepository.AddUserTypeData(userType);
+            var userResult = buissenessLayer.AddUserTypeData(userType);
             try
             {
                 if (userResult != null)
@@ -110,7 +80,7 @@ namespace ParkingLotApi.Controllers
         [HttpDelete]
         public IActionResult DeleteUserTypeData(int userId)
         {
-            var userResult = userRepository.DeleteUserTypeData(userId);
+            var userResult = buissenessLayer.DeleteUserTypeData(userId);
             try
             {
                 if (userResult != null)
