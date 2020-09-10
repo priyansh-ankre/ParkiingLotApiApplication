@@ -13,13 +13,17 @@ namespace ParkingLotApi.Controllers
     public class DriverController : ControllerBase
     {
         private readonly IParkingLotBussiness parkingLotBussiness;
+        private readonly MSMQ mSMQ = new MSMQ();
         public DriverController(IParkingLotBussiness parkingLotBussiness)
         {
             this.parkingLotBussiness = parkingLotBussiness;
         }
 
+        //MSMQ msmq = new MSMQ();
+
         [HttpPost]
-        public IActionResult AddParking(Parking parking)
+        [Route("AddParking")]
+        public IActionResult AddParking([FromBody] Parking parking)
         {
 
             var parkingResult = this.parkingLotBussiness.AddParkingData(parking);
@@ -27,6 +31,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (parkingResult != null)
                 {
+                    this.mSMQ.Sender("Driver Parked Vehicle Having Number: " + parking.VehicleNumber);
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", parkingResult));
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", parkingResult));
@@ -39,9 +44,10 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult Unparking(int parkingSlot, string exitTime, int charges)
+        [Route("Unparking/{parkingSlot:int}")]
+        public IActionResult Unparking(int parkingSlot)
         {
-            var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlot,exitTime,charges);
+            var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlot);
             try
             {
                 if (unparkingResult != null)

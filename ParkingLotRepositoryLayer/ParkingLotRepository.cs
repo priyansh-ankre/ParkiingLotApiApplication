@@ -61,12 +61,9 @@ namespace ParkingLotRepositoryLayer
 
             sqlCommand.Parameters.AddWithValue("@ParkingSLot", parking.ParkingSLot);
             sqlCommand.Parameters.AddWithValue("@VehicleNumber", parking.VehicleNumber);
-            sqlCommand.Parameters.AddWithValue("@EntryTime", parking.EntryTime);
             sqlCommand.Parameters.AddWithValue("@VehicleId", parking.VehicleId);
             sqlCommand.Parameters.AddWithValue("@ParkingId", parking.ParkingId);
             sqlCommand.Parameters.AddWithValue("@RolesId", parking.RolesId);
-            sqlCommand.Parameters.AddWithValue("@Disabled", parking.Disabled);
-            sqlCommand.Parameters.AddWithValue("@ExitTime", parking.ExitTime);
             sqlCommand.Parameters.AddWithValue("@Charges", parking.Charges);
 
             sqlConnection.Open();
@@ -201,14 +198,12 @@ namespace ParkingLotRepositoryLayer
            
         }
 
-        public object Unparking(int parkingSlot,string exitTime,int charges)
+        public object Unparking(int parkingSlot)
         {
             SqlCommand sqlCommand = new SqlCommand("spUnparking", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
             sqlCommand.Parameters.AddWithValue("@ParkingSlot", parkingSlot);
-            sqlCommand.Parameters.AddWithValue("@ExitTime", exitTime);
-            sqlCommand.Parameters.AddWithValue("@Charges", charges);
 
             sqlConnection.Open();
             var result = sqlCommand.ExecuteNonQuery();

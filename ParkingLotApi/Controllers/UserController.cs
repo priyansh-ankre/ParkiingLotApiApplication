@@ -18,6 +18,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
+        [Route("GetUsers")]
         public IActionResult GetUsers()
         {
             var userResult = buissenessLayer.GetUsers();
@@ -59,7 +60,8 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUserTypeData(UserType userType)
+        [Route("AddUserTypeData")]
+        public IActionResult AddUserTypeData([FromBody] UserType userType)
         {
             var userResult = buissenessLayer.AddUserTypeData(userType);
             try
@@ -78,6 +80,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpDelete]
+        [Route("DeleteUserTypeData/{userId:int}")]
         public IActionResult DeleteUserTypeData(int userId)
         {
             var userResult = buissenessLayer.DeleteUserTypeData(userId);

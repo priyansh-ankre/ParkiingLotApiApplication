@@ -6,7 +6,6 @@ namespace ParkingLotModelLayer
 {
     public class Parking
     {
-        [Required]
         [Key]
         public int Id { get; set; }
 
@@ -16,7 +15,6 @@ namespace ParkingLotModelLayer
         [Required]
         public string VehicleNumber { get; set; }
 
-        [Required]
         public string EntryTime { get; set; }
 
         [Required]
@@ -31,7 +29,6 @@ namespace ParkingLotModelLayer
         [ForeignKey("Roles")]
         public int RolesId { get; set; }
 
-        [Required]
         public bool Disabled { get; set; }
 
         public string ExitTime { get; set; }

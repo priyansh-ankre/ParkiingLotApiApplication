@@ -13,19 +13,23 @@ namespace ParkingLotApi.Controllers
     public class OwnerController : ControllerBase
     {
         private readonly IParkingLotBussiness parkingLotBussiness;
+        private readonly MSMQ mSMQ = new MSMQ();
         public OwnerController(IParkingLotBussiness parkingLotBussiness)
         {
             this.parkingLotBussiness = parkingLotBussiness;
         }
 
+
         [HttpPost]
-        public IActionResult AddParking(Parking parking)
+        [Route("Park")]
+        public IActionResult AddParking([FromBody] Parking parking)
         {
             var parkingResult = this.parkingLotBussiness.AddParkingData(parking);
             try
             {
                 if (parkingResult != null)
                 {
+                    this.mSMQ.Sender("Driver Parked Vehicle Having Number: " + parking.VehicleNumber);
                     return this.Ok(new Response(HttpStatusCode.Created,"List of Parking Data",parkingResult));
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", parkingResult));
@@ -38,9 +42,10 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPut]
-        public IActionResult Unparking(int parkingSlot, string exitTime, int charges)
+        [Route("Unparking/{parkingSlot:int}")]
+        public IActionResult Unparking(int parkingSlot)
         {
-            var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlot,exitTime,charges);
+            var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlot);
             try
             {
                 if (unparkingResult != null)
@@ -57,6 +62,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllParkingData")]
         public IActionResult GetAllParkingData()
         {
             var getResult = this.parkingLotBussiness.GetAllParkingData();
@@ -64,7 +70,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (getResult != null)
                 {
-                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));
+                    return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", getResult));  
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", getResult));
             }
@@ -76,7 +82,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetParkingByVehicleNumber")]
+        [Route("GetParkingDetails/&vehicleNumber={vehicleNumber}")]
         public IActionResult GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByVehicleNumber(vehicleNumber);
@@ -96,7 +102,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetParkingByParkingSlot")]
+        [Route("GetParkingByParkingSlot/{parkingSlot:int}")]
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);
@@ -116,7 +122,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteAllUnparkedData")]
+        [Route("DeleteParkingData")]
         public IActionResult DeleteAllUnparkedData()
         {
             var deleteResult = this.parkingLotBussiness.DeleteAllUnParkedData();
@@ -136,7 +142,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteParkingDataByParkingSlot")]
+        [Route("DeleteParkingData/{parkingSlot:int}")]
         public IActionResult DeleteParkingDataByParkingSlot(int parkingSlot)
         {
             var deleteResult = parkingLotBussiness.DeleteParkingDataByParkingSlot(parkingSlot);

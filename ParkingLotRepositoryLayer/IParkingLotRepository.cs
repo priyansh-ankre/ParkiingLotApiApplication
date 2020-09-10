@@ -14,6 +14,6 @@ namespace ParkingLotRepositoryLayer
         object DeleteAllUnParkedData();
         Parking GetParkingDataByVehicleNumber(string vehicleNumber);
         Parking GetParkingDataByParkingSlot(int parkingSlot);
-        object Unparking(int parkingSlot, string exitTime, int charges);
+        object Unparking(int parkingSlot);
     }
 }
