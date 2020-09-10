@@ -12,13 +12,14 @@ namespace ParkingLotApi.Controllers
     public class UserController : ControllerBase
     {
         public readonly IUserBussiness buissenessLayer;
+        private readonly MSMQ mSMQ = new MSMQ();
         public UserController(IUserBussiness buissenessLayer )
         {
             this.buissenessLayer = buissenessLayer;
         }
 
         [HttpGet]
-        [Route("GetUsers")]
+        [Route("GetAllUserDetails")]
         public IActionResult GetUsers()
         {
             var userResult = buissenessLayer.GetUsers();
@@ -60,7 +61,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPost]
-        [Route("AddUserTypeData")]
+        [Route("UserRegistration")]
         public IActionResult AddUserTypeData([FromBody] UserType userType)
         {
             var userResult = buissenessLayer.AddUserTypeData(userType);
@@ -68,6 +69,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (userResult != null)
                 {
+                    mSMQ.Sender("User with email "+userType.Email+" is registred.");
                     return Ok(new Response(HttpStatusCode.OK, "List of User", userResult));
                 }
                 return NotFound(new Response(HttpStatusCode.NotFound, "List of User is Not Found", userResult));
@@ -80,7 +82,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteUserTypeData/{userId:int}")]
+        [Route("DeleteUserData/{userId:int}")]
         public IActionResult DeleteUserTypeData(int userId)
         {
             var userResult = buissenessLayer.DeleteUserTypeData(userId);
@@ -88,6 +90,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (userResult != null)
                 {
+                    mSMQ.Sender("Information of user is Deleted with userId: "+userId);
                     return Ok(new Response(HttpStatusCode.OK, "List of User", userResult));
                 }
                 return NotFound();

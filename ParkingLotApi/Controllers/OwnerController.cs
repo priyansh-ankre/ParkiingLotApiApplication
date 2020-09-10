@@ -42,7 +42,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPut]
-        [Route("Unparking/{parkingSlot:int}")]
+        [Route("Unpark  /{parkingSlot:int}")]
         public IActionResult Unparking(int parkingSlot)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlot);
@@ -50,6 +50,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (unparkingResult != null)
                 {
+                    mSMQ.Sender("Driver unParked Vehicle Having Parking Slot: "+parkingSlot);
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", unparkingResult));
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", unparkingResult));
@@ -102,7 +103,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetParkingByParkingSlot/{parkingSlot:int}")]
+        [Route("GetParkingDetails/&parkingSlot={parkingSlot:int}")]
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);
@@ -122,7 +123,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteParkingData")]
+        [Route("DeleteUnParkingData")]
         public IActionResult DeleteAllUnparkedData()
         {
             var deleteResult = this.parkingLotBussiness.DeleteAllUnParkedData();
@@ -130,6 +131,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (deleteResult != null)
                 {
+                    mSMQ.Sender("all the unparking vehicles information is deleted");
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", deleteResult));
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", deleteResult));
@@ -150,6 +152,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (deleteResult != null)
                 {
+                    mSMQ.Sender("Information of vehicle is deleted for Parking Slot: "+parkingSlot);
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", deleteResult));
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", deleteResult));

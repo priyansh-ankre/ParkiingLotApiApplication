@@ -13,13 +13,14 @@ namespace ParkingLotApi.Controllers
     public class PoliceController : ControllerBase
     {
         private readonly IParkingLotBussiness parkingLotBussiness;
+        private readonly MSMQ mSMQ = new MSMQ();
         public PoliceController(IParkingLotBussiness parkingLotBussiness)
         {
             this.parkingLotBussiness = parkingLotBussiness;
         }
 
         [HttpPost]
-        [Route("AddParking")]
+        [Route("Park")]
         public IActionResult AddParking([FromBody] Parking parking)
         {
 
@@ -28,6 +29,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (parkingResult != null)
                 {
+                    mSMQ.Sender("Driver Parked Vehicle Having Number: " + parking.VehicleNumber);
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", parkingResult));
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", parkingResult));
@@ -40,7 +42,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpPut]
-        [Route("Unparking/{parkingSlot:int}")]
+        [Route("Unpark/{parkingSlot:int}")]
         public IActionResult Unparking(int parkingSlot)
         {
             var unparkingResult = this.parkingLotBussiness.Unparking(parkingSlot);
@@ -48,6 +50,7 @@ namespace ParkingLotApi.Controllers
             {
                 if (unparkingResult != null)
                 {
+                    mSMQ.Sender("Driver unParked Vehicle Having Parking Slot: " + parkingSlot);
                     return this.Ok(new Response(HttpStatusCode.OK, "List of Parking Data", unparkingResult));
                 }
                 return this.NotFound(new Response(HttpStatusCode.NotFound, "List of Parking Data is Not Found", unparkingResult));
@@ -60,7 +63,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetParkingByVehicleNumber/{vehicleNumber}")]
+        [Route("GetParkingDetails/&vehicleNumber={vehicleNumber}")]
         public IActionResult GetParkingDataByVehicleNumber(string vehicleNumber)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByVehicleNumber(vehicleNumber);
@@ -80,7 +83,7 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetParkingByParkingSlot/{parkingSlot:int}")]
+        [Route("GetParkingDetails/&parkingSlot={parkingSlot:int}")]
         public IActionResult GetParkingDataByParkingSlot(int parkingSlot)
         {
             var getResult = this.parkingLotBussiness.GetParkingDataByParkingSlot(parkingSlot);
