@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using ParkingLotModelLayer;
 using System;
 using System.Collections.Generic;
@@ -16,11 +18,14 @@ namespace ParkingLotRepositoryLayer
         private readonly IConfiguration configuration;
         private readonly string connectionString;
         private readonly SqlConnection sqlConnection;
-        public UserRepository(IConfiguration configuration)
+        private IDistributedCache distributedCache;
+
+        public UserRepository(IConfiguration configuration,IDistributedCache distributedCache)
         {
             this.configuration = configuration;
             this.connectionString = this.configuration.GetConnectionString("UserDbConnection");
             this.sqlConnection = new SqlConnection(connectionString);
+            this.distributedCache = distributedCache;
         }
 
         public string GenerateToken(UserLogin login)
@@ -70,6 +75,8 @@ namespace ParkingLotRepositoryLayer
 
                 userTypesList.Add(userType);
             }
+            var json = JsonConvert.SerializeObject(userTypesList);
+            this.distributedCache.SetString("UserDetails", json);
             return userTypesList;
         }
 
