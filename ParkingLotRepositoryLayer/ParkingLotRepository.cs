@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using ParkingLotModelLayer;
 using System;
 using System.Collections.Generic;
@@ -16,14 +18,16 @@ namespace ParkingLotRepositoryLayer
         private readonly IConfiguration configuration;
         private readonly string connectionString;
         private readonly SqlConnection sqlConnection;
-        public ParkingLotRepository(IConfiguration configuration)
+        private readonly IDistributedCache distributedCache;
+        public ParkingLotRepository(IConfiguration configuration, IDistributedCache distributedCache)
         {
             this.configuration = configuration;
             this.connectionString = this.configuration.GetConnectionString("UserDbConnection");
             this.sqlConnection = new SqlConnection(connectionString);
+            this.distributedCache = distributedCache;
         }
 
-        
+
 
         public IEnumerable<Parking> GetAllParkingData()
         {
@@ -51,11 +55,13 @@ namespace ParkingLotRepositoryLayer
 
                 parkingList.Add(parking);
             }
+            this.PutListToCache(parkingList);
             return parkingList;
         }
 
         public Parking AddParkingData(Parking parking)
         {
+            
             SqlCommand sqlCommand = new SqlCommand("spAddParkingData(Parking)", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
@@ -76,6 +82,7 @@ namespace ParkingLotRepositoryLayer
         {
             SqlCommand sqlCommand = new SqlCommand("spAddParkingTypeData", sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
+
 
             sqlCommand.Parameters.AddWithValue("ParkingTypes", parkingType.ParkingTypes);
 
@@ -187,7 +194,7 @@ namespace ParkingLotRepositoryLayer
                 }
                 return parking;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
@@ -195,20 +202,34 @@ namespace ParkingLotRepositoryLayer
             {
                 sqlConnection.Close();
             }
-           
+
         }
 
         public object Unparking(int parkingSlot)
         {
-            SqlCommand sqlCommand = new SqlCommand("spUnparking", sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand("spUnparking", sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
 
-            sqlCommand.Parameters.AddWithValue("@ParkingSlot", parkingSlot);
+                sqlCommand.Parameters.AddWithValue("@ParkingSlot", parkingSlot);
 
-            sqlConnection.Open();
-            var result = sqlCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-            return result;
+                sqlConnection.Open();
+                var result = sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+                return result;
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+        }
+
+        public void PutListToCache(List<Parking> parking)
+        {
+            var json = JsonConvert.SerializeObject(parking);
+            this.distributedCache.SetString("Park", json);
         }
     }
 }

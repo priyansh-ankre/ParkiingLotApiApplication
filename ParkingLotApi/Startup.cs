@@ -68,6 +68,11 @@ namespace ParkingLotApi
                           ValidAudience = Configuration["JWT:Audience"]
                       };
                   });
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+                options.InstanceName = "Parking_Lot_Api:";
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

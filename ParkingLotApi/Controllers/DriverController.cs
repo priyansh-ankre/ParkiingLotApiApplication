@@ -19,13 +19,10 @@ namespace ParkingLotApi.Controllers
             this.parkingLotBussiness = parkingLotBussiness;
         }
 
-        //MSMQ msmq = new MSMQ();
-
         [HttpPost]
         [Route("Park")]
         public IActionResult AddParking([FromBody] Parking parking)
         {
-
             var parkingResult = this.parkingLotBussiness.AddParkingData(parking);
             try
             {
@@ -38,7 +35,6 @@ namespace ParkingLotApi.Controllers
             }
             catch (Exception)
             {
-
                 return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot displayed", null));
             }
         }
@@ -59,7 +55,6 @@ namespace ParkingLotApi.Controllers
             }
             catch (Exception)
             {
-
                 return this.BadRequest(new Response(HttpStatusCode.BadRequest, "List of Parking Data cannot be displayed", null));
             }
         }

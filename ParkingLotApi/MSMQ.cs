@@ -18,6 +18,7 @@ namespace ParkingLotApi
                 this.messageQueue = MessageQueue.Create(this.messageQueue.Path);
             }
         }
+
         public void Sender(string message)
         {
             try
@@ -36,7 +37,6 @@ namespace ParkingLotApi
             {
                 Console.WriteLine(e.Message);
             }
-           
         }
 
         public void ReceiverQueue(object sender, ReceiveCompletedEventArgs e)
